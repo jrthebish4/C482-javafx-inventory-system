@@ -6,9 +6,9 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="addPartPane"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="404.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPartController">
+              minWidth="-Infinity" prefHeight="404.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPartController">
   <children>
-    <Label fx:id="addPartLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Add Part" textFill="#3315b9" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+    <Label fx:id="addPartLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Add Part" textFill="#002294" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
       <font>
         <Font size="18.0" />
       </font>

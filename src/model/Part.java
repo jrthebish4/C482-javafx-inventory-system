@@ -1,68 +1,86 @@
 package model;
 
+import javafx.beans.property.*;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 public abstract class Part {
+    private static final AtomicInteger count = new AtomicInteger(0);
 
-    private int id;
-    private String name;
-    private double price;
-    private int stock;
-    private int min;
-    private int max;
+    private SimpleIntegerProperty id;
+    private SimpleStringProperty name;
+    private SimpleDoubleProperty price;
+    private SimpleIntegerProperty stock;
+    private SimpleIntegerProperty min;
+    private SimpleIntegerProperty max;
 
-    public Part(int id, String name, double price, int stock, int min, int max) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.min = min;
-        this.max = max;
+    public Part(String name, double price, int stock, int min, int max) {
+        this.id = new SimpleIntegerProperty(count.incrementAndGet());
+        this.name = new SimpleStringProperty(name);
+        this.price = new SimpleDoubleProperty(price);
+        this.stock = new SimpleIntegerProperty(stock);
+        this.min = new SimpleIntegerProperty(min);
+        this.max = new SimpleIntegerProperty(max);
     }
 
     public int getId() {
-        return id;
+        return id.get();
     }
 
-    public void setId(int id) {
+    public void setId(SimpleIntegerProperty id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
-    public void setName(String name) {
+    public void setName(SimpleStringProperty name) {
         this.name = name;
     }
 
     public double getPrice() {
-        return price;
+        return price.get();
     }
 
-    public void setPrice(double price) {
+    public void setPrice(SimpleDoubleProperty price) {
         this.price = price;
     }
 
     public int getStock() {
-        return stock;
+        return stock.get();
     }
 
-    public void setStock(int stock) {
+    public void setStock(SimpleIntegerProperty stock) {
         this.stock = stock;
     }
 
     public int getMin() {
-        return min;
+        return min.get();
     }
 
-    public void setMin(int min) {
+    public void setMin(SimpleIntegerProperty min) {
         this.min = min;
     }
 
     public int getMax() {
-        return max;
+        return max.get();
     }
 
-    public void setMax(int max) {
+    public void setMax(SimpleIntegerProperty max) {
         this.max = max;
     }
+
+    @Override
+    public String toString() {
+        return "Part{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", price=" + getPrice() +
+                ", stock=" + getStock() +
+                ", min=" + getMin() +
+                ", max=" + getMax() +
+                ',';
+    }
+
 }

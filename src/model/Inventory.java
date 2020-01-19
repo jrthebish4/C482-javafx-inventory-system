@@ -3,20 +3,22 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+
 public class Inventory {
 
-    ObservableList<Part> allParts;
-    ObservableList<Product> allProducts;
+    private static ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
-    public void addPart(Part newPart) {
+    public static void addPart(Part newPart) {
         allParts.add(newPart);
     }
 
-    public void addProduct(Product newProduct) {
+    public static void addProduct(Product newProduct) {
         allProducts.add(newProduct);
     }
 
-    public Part lookupPart(int partId) throws NullPointerException {
+    public static Part lookupPart(int partId) throws NullPointerException {
         Part partFound = null;
 
         for (Part part : allParts) {
@@ -26,7 +28,7 @@ public class Inventory {
         return partFound;
     }
 
-    public Product lookupProduct(int productId) throws NullPointerException {
+    public static Product lookupProduct(int productId) throws NullPointerException {
         Product productFound = null;
 
         for (Product product : allProducts) {
@@ -37,7 +39,7 @@ public class Inventory {
     }
 
 
-    public ObservableList<Part> lookupPart(String partName) {
+    public static ObservableList<Part> lookupPart(String partName) {
         ObservableList<Part> partsFound = FXCollections.observableArrayList();
 
         for (Part part : allParts) {
@@ -47,7 +49,7 @@ public class Inventory {
         return partsFound;
     }
 
-    public ObservableList<Product> lookupProduct(String productName) {
+    public static ObservableList<Product> lookupProduct(String productName) {
         ObservableList<Product> productsFound = FXCollections.observableArrayList();
 
         for (Product product : allProducts) {
@@ -57,15 +59,15 @@ public class Inventory {
         return productsFound;
     }
 
-    public void updatePart(int index, Part selectedPart) {
+    public static void updatePart(int index, Part selectedPart) {
         allParts.set(index, selectedPart);
     }
 
-    public void updateProduct(int index, Product newProduct) {
+    public static void updateProduct(int index, Product newProduct) {
         allProducts.set(index, newProduct);
     }
 
-    public boolean deletePart(Part selectedPart) {
+    public static boolean deletePart(Part selectedPart) {
         boolean successfulDelete = false;
 
         for (Part part : allParts) {
@@ -78,7 +80,7 @@ public class Inventory {
         return successfulDelete;
     }
 
-    public boolean deleteProduct(Product selectedProduct) {
+    public static boolean deleteProduct(Product selectedProduct) {
         boolean successfulDelete = false;
 
         for (Product product : allProducts) {
@@ -91,11 +93,11 @@ public class Inventory {
         return successfulDelete;
     }
 
-    public ObservableList<Part> getAllParts() {
+    public static ObservableList<Part> getAllParts() {
         return allParts;
     }
 
-    public ObservableList<Product> getAllProducts() {
+    public static ObservableList<Product> getAllProducts() {
         return allProducts;
     }
 
