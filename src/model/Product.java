@@ -1,7 +1,10 @@
-package inventory;
+package model;
 
-public abstract class Part {
+import javafx.collections.ObservableList;
 
+public class Product {
+
+    private ObservableList<Part> associatedParts;
     private int id;
     private String name;
     private double price;
@@ -9,7 +12,7 @@ public abstract class Part {
     private int min;
     private int max;
 
-    public Part(int id, String name, double price, int stock, int min, int max) {
+    public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -64,5 +67,26 @@ public abstract class Part {
 
     public void setMax(int max) {
         this.max = max;
+    }
+
+    public void addAssociatedPart(Part part) {
+        associatedParts.add(part);
+    }
+
+    public boolean deleteAssociatedPart(Part selectedAsPart) {
+        boolean successfulDelete = false;
+
+        for (Part part : associatedParts) {
+            if (part.getId() == selectedAsPart.getId()) {
+                associatedParts.remove(selectedAsPart.getId());
+                successfulDelete = true;
+            }
+        }
+
+        return successfulDelete;
+    }
+
+    public ObservableList<Part> getAllAssociatedParts() {
+        return associatedParts;
     }
 }
