@@ -3,8 +3,6 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-
 public class Inventory {
 
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
@@ -70,10 +68,12 @@ public class Inventory {
     public static boolean deletePart(Part selectedPart) {
         boolean successfulDelete = false;
 
-        for (Part part : allParts) {
-            if (part.getId() == selectedPart.getId()) {
-                allParts.remove(part);
-                successfulDelete = true;
+        if (!allParts.isEmpty()) {
+            for (Part part : allParts) {
+                if (part.getId() == selectedPart.getId()) {
+                    allParts.remove(part);
+                    successfulDelete = true;
+                }
             }
         }
 
@@ -83,10 +83,12 @@ public class Inventory {
     public static boolean deleteProduct(Product selectedProduct) {
         boolean successfulDelete = false;
 
-        for (Product product : allProducts) {
-            if (product.getId() == selectedProduct.getId()) {
-                allProducts.remove(product);
-                successfulDelete = true;
+        if (!allProducts.isEmpty()) {
+            for (Product product : allProducts) {
+                if (product.getId() == selectedProduct.getId()) {
+                    allProducts.remove(product);
+                    successfulDelete = true;
+                }
             }
         }
 
@@ -100,6 +102,5 @@ public class Inventory {
     public static ObservableList<Product> getAllProducts() {
         return allProducts;
     }
-
 
 }

@@ -49,6 +49,7 @@ public class MainScreenController implements Initializable {
     @FXML public Button addProductButton;
     @FXML public Button modifyProductButton;
     @FXML public Button deleteProductButton;
+    static Part partToModify;
 
     public void clickPartSearch(ActionEvent actionEvent) {
 
@@ -63,10 +64,16 @@ public class MainScreenController implements Initializable {
     }
 
     public void clickModifyPart(ActionEvent actionEvent) throws IOException {
+        partToModify = partTable.getSelectionModel().getSelectedItem();
         changeScene(actionEvent, "/view/modifyPartScreen.fxml");
+        System.out.print("Part to modify: " + partToModify.toString());
     }
 
-    public void clickDeletePart(ActionEvent actionEvent) {
+    public void clickDeletePart(ActionEvent actionEvent) throws IOException {
+        Inventory.deletePart(partTable.getSelectionModel().getSelectedItem());
+        changeScene(actionEvent, "/view/mainScreen.fxml");
+
+        System.out.print("Updated Part Inventory: " + Inventory.getAllParts().toString());
     }
 
     public void clickProductSearch(ActionEvent actionEvent) {
@@ -85,14 +92,15 @@ public class MainScreenController implements Initializable {
     }
 
     public void clickExit(ActionEvent actionEvent) {
+        System.out.println("Closing application...");
         System.exit(0);
     }
 
     private void changeScene(ActionEvent actionEvent, String pathToSceneFxml) throws IOException {
-        Parent addPartParent = FXMLLoader.load(getClass().getResource(pathToSceneFxml));
+        Parent parent = FXMLLoader.load(getClass().getResource(pathToSceneFxml));
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        window.setScene(new Scene(addPartParent));
+        window.setScene(new Scene(parent));
         window.show();
     }
 
@@ -111,5 +119,5 @@ public class MainScreenController implements Initializable {
         partTable.setItems(Inventory.getAllParts());
         productTable.setItems(Inventory.getAllProducts());
     }
-    
+
 }

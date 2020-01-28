@@ -55,7 +55,7 @@ public class AddPartController implements Initializable {
                         convertInputsToOutsourcedPart()
                 );
             }
-            System.out.print(Inventory.getAllParts().toString());
+            System.out.print("Updated Part List: " + Inventory.getAllParts().toString());
 
             returnToMainScene(actionEvent);
         }

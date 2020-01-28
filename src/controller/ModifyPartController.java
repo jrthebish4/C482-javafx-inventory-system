@@ -10,6 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.InHouse;
+import model.Inventory;
+import model.Outsourced;
 import model.Part;
 
 import java.io.IOException;
@@ -38,7 +41,8 @@ public class ModifyPartController implements Initializable {
     @FXML public TextField companyField;
     @FXML public Button saveButton;
     @FXML public Button cancelButton;
-
+    private ToggleGroup sourceToggleGroup;
+    final private Part partToModify = MainScreenController.partToModify;
 
     public void displayInHousePartFields() {
         companyLabel.setText("Machine ID");
@@ -50,11 +54,53 @@ public class ModifyPartController implements Initializable {
         companyField.setPromptText("Company Name");
     }
 
-    public void modifyNewPart(Part part) {
+    public void modifyNewPart(ActionEvent actionEvent) throws IOException {
+        if (hasARadioBeenSelected()) {
 
+            if (sourceToggleGroup.getSelectedToggle().equals(inHouseRadio)) {
+                Inventory.addPart(
+                        convertInputsToInHousePart()
+                );
+            } else if (sourceToggleGroup.getSelectedToggle().equals(outsourcedRadio)) {
+                Inventory.addPart(
+                        convertInputsToOutsourcedPart()
+                );
+            }
+            System.out.print(Inventory.getAllParts().toString());
+
+            returnToMainScene(actionEvent);
+        }
     }
 
     public void cancelModifyPart(ActionEvent actionEvent) throws IOException {
+        returnToMainScene(actionEvent);
+    }
+
+    private Part convertInputsToInHousePart() {
+        return new InHouse(partNameField.getText(), Double.parseDouble(priceField.getText()),
+                Integer.parseInt(inventoryField.getText()), Integer.parseInt(minField.getText()),
+                Integer.parseInt(maxField.getText()), Integer.parseInt(companyField.getText()));
+    }
+
+    private Part convertInputsToOutsourcedPart() {
+        return new Outsourced(partNameField.getText(), Double.parseDouble(priceField.getText()),
+                Integer.parseInt(inventoryField.getText()), Integer.parseInt(minField.getText()),
+                Integer.parseInt(maxField.getText()), companyField.getText());
+    }
+
+    private boolean hasARadioBeenSelected(){
+        if (sourceToggleGroup.getSelectedToggle() == null) {
+            Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
+            noSourceAlert.setHeaderText("Part source selection is required.");
+            noSourceAlert.setContentText("Please select \"In-House\" or \"Outsourced\" to continue.");
+            noSourceAlert.showAndWait();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void returnToMainScene(ActionEvent actionEvent) throws IOException {
         Parent mainScreenParent = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
@@ -64,10 +110,21 @@ public class ModifyPartController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ToggleGroup sourceToggleGroup = new ToggleGroup();
+        sourceToggleGroup = new ToggleGroup();
         inHouseRadio.setToggleGroup(sourceToggleGroup);
         outsourcedRadio.setToggleGroup(sourceToggleGroup);
 
+        partIdField.setText(Integer.toString(partToModify.getId()));
+        partNameField.setText(partToModify.getName());
+        inventoryField.setText(Integer.toString(partToModify.getStock()));
+        priceField.setText(Double.toString(partToModify.getPrice()));
+        maxField.setText(Integer.toString(partToModify.getMax()));
+        minField.setText(Integer.toString(partToModify.getMin()));
 
+        if (partToModify instanceof InHouse) {
+            companyField.setText(Integer.toString(((InHouse) partToModify).getMachineId()));
+        } else if (partToModify instanceof Outsourced) {
+            companyField.setText(((Outsourced) partToModify).getCompanyName());
+        }
     }
 }
