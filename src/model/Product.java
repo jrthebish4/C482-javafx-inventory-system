@@ -19,6 +19,10 @@ public class Product {
     private SimpleIntegerProperty min;
     private SimpleIntegerProperty max;
 
+    public Product() {
+        this.id = new SimpleIntegerProperty(count.getAndIncrement());
+    }
+
     public Product(String name, double price, int stock, int min, int max) {
         this.id = new SimpleIntegerProperty(count.getAndIncrement());
         this.name = new SimpleStringProperty(name);
@@ -101,12 +105,12 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "associatedParts=" + associatedParts +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", min=" + min +
-                ", max=" + max +
+                ", id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", price=" + getPrice() +
+                ", stock=" + getStock() +
+                ", min=" + getMin() +
+                ", max=" + getMax() +
                 '}';
     }
 }

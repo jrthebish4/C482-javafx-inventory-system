@@ -82,13 +82,18 @@ public class MainScreenController implements Initializable {
     public void productTextSeach(ActionEvent actionEvent) {
     }
 
-    public void clickAddProduct(ActionEvent actionEvent) {
+    public void clickAddProduct(ActionEvent actionEvent) throws IOException {
+        changeScene(actionEvent, "/view/addProductScreen.fxml");
     }
 
     public void clickModifyProduct(ActionEvent actionEvent) {
     }
 
-    public void clickDeleteProduct(ActionEvent actionEvent) {
+    public void clickDeleteProduct(ActionEvent actionEvent) throws IOException {
+        Inventory.deleteProduct(productTable.getSelectionModel().getSelectedItem());
+        changeScene(actionEvent, "/view/mainScreen.fxml");
+
+        System.out.print("Updated Product Inventory: " + Inventory.getAllProducts().toString());
     }
 
     public void clickExit(ActionEvent actionEvent) {
