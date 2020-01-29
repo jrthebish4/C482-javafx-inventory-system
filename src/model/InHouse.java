@@ -22,7 +22,8 @@ public class InHouse extends Part {
     @Override
     public String toString() {
         return super.toString() +
-                "machineId=" + getMachineId() +
+                " machineId=" + getMachineId() +
                 '}';
     }
+
 }

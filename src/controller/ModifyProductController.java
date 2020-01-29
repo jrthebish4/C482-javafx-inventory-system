@@ -22,10 +22,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddProductController implements Initializable {
+public class ModifyProductController implements Initializable {
 
-    @FXML public AnchorPane addProductPane;
-    @FXML public Label addProductLabel;
+    @FXML public AnchorPane modifyProductPane;
+    @FXML public Label modifyProductLabel;
     @FXML public Label idLabel;
     @FXML public TextField productIdField;
     @FXML public Label nameLabel;
@@ -40,12 +40,12 @@ public class AddProductController implements Initializable {
     @FXML public TextField minField;
     @FXML public Button searchButton;
     @FXML public TextField searchField;
-    @FXML public TableView<Part> addPartTable;
-    @FXML public TableColumn<Part, Integer> addPartIdColumn;
-    @FXML public TableColumn<Part, String> addPartNameColumn;
-    @FXML public TableColumn<Part, Integer> addPartInventoryColumn;
-    @FXML public TableColumn<Part, Double> addPartPriceColumn;
-    @FXML public Button addPartButton;
+    @FXML public TableView<Part> modifyPartTable;
+    @FXML public TableColumn<Part, Integer> modifyPartIdColumn;
+    @FXML public TableColumn<Part, String> modifyPartNameColumn;
+    @FXML public TableColumn<Part, Integer> modifyPartInventoryColumn;
+    @FXML public TableColumn<Part, Double> modifyPartPriceColumn;
+    @FXML public Button modifyPartButton;
     @FXML public TableView<Part> deletePartTable;
     @FXML public TableColumn<Part, Integer> deletePartIdColumn;
     @FXML public TableColumn<Part, String> deletePartNameColumn;
@@ -55,39 +55,39 @@ public class AddProductController implements Initializable {
     @FXML public Button saveButton;
     @FXML public Button cancelButton;
 
-    final private Product productToAdd = new Product();
+    final private Product productToModify = MainScreenController.productToModify;
 
     public void searchParts() {
-        addPartTable.setItems(Inventory.lookupPart(searchField.getText()));
+        modifyPartTable.setItems(Inventory.lookupPart(searchField.getText()));
     }
 
     public void associatePart() {
-        productToAdd.addAssociatedPart(
-                addPartTable.getSelectionModel().getSelectedItem()
+        productToModify.addAssociatedPart(
+                modifyPartTable.getSelectionModel().getSelectedItem()
         );
-        deletePartTable.setItems(productToAdd.getAllAssociatedParts());
+        deletePartTable.setItems(productToModify.getAllAssociatedParts());
     }
 
     public void dissociatePart() {
-        productToAdd.deleteAssociatedPart(
-                addPartTable.getSelectionModel().getSelectedItem()
+        productToModify.deleteAssociatedPart(
+                modifyPartTable.getSelectionModel().getSelectedItem()
         );
-        deletePartTable.setItems(productToAdd.getAllAssociatedParts());
+        deletePartTable.setItems(productToModify.getAllAssociatedParts());
     }
 
     public void saveProduct(ActionEvent actionEvent) throws IOException {
-        productToAdd.setName(new SimpleStringProperty(productNameField.getText()));
-        productToAdd.setStock(new SimpleIntegerProperty(Integer.parseInt(inventoryField.getText())));
-        productToAdd.setPrice(new SimpleDoubleProperty(Double.parseDouble(priceField.getText())));
-        productToAdd.setMax(new SimpleIntegerProperty(Integer.parseInt(maxField.getText())));
-        productToAdd.setMin(new SimpleIntegerProperty(Integer.parseInt(minField.getText())));
-        Inventory.addProduct(productToAdd);
+        productToModify.setName(new SimpleStringProperty(productNameField.getText()));
+        productToModify.setStock(new SimpleIntegerProperty(Integer.parseInt(inventoryField.getText())));
+        productToModify.setPrice(new SimpleDoubleProperty(Double.parseDouble(priceField.getText())));
+        productToModify.setMax(new SimpleIntegerProperty(Integer.parseInt(maxField.getText())));
+        productToModify.setMin(new SimpleIntegerProperty(Integer.parseInt(minField.getText())));
+        Inventory.updateProduct(productToModify.getId(), productToModify);
 
         System.out.println("Updated Product List: " + Inventory.getAllProducts().toString());
         returnToMainScene(actionEvent);
     }
 
-    public void cancelProductCreation(ActionEvent actionEvent) throws IOException {
+    public void cancelProductModify(ActionEvent actionEvent) throws IOException {
         returnToMainScene(actionEvent);
     }
 
@@ -100,17 +100,25 @@ public class AddProductController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addPartIdColumn.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
-        addPartNameColumn.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
-        addPartInventoryColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
-        addPartPriceColumn.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
+        productIdField.setText(Integer.toString(productToModify.getId()));
+        productNameField.setText(productToModify.getName());
+        inventoryField.setText(Integer.toString(productToModify.getStock()));
+        priceField.setText(Double.toString(productToModify.getPrice()));
+        maxField.setText(Integer.toString(productToModify.getMax()));
+        minField.setText(Integer.toString(productToModify.getMin()));
+
+        modifyPartIdColumn.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
+        modifyPartNameColumn.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
+        modifyPartInventoryColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
+        modifyPartPriceColumn.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
         deletePartIdColumn.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
         deletePartNameColumn.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         deletePartInventoryColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         deletePartPriceColumn.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
-        addPartTable.setItems(Inventory.getAllParts());
+        modifyPartTable.setItems(Inventory.getAllParts());
+        deletePartTable.setItems(productToModify.getAllAssociatedParts());
     }
 
 }

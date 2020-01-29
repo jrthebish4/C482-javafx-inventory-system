@@ -22,7 +22,7 @@ public class Outsourced extends Part {
     @Override
     public String toString() {
         return super.toString() +
-                "companyName='" + getCompanyName() + '\'' +
+                " companyName='" + getCompanyName() + '\'' +
                 '}';
     }
 }

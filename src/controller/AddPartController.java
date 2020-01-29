@@ -45,7 +45,6 @@ public class AddPartController implements Initializable {
 
     public void addNewPart(ActionEvent actionEvent) throws IOException {
         if (hasARadioBeenSelected()) {
-
             if (sourceToggleGroup.getSelectedToggle().equals(inHouseRadio)) {
                 Inventory.addPart(
                         convertInputsToInHousePart()
@@ -55,8 +54,7 @@ public class AddPartController implements Initializable {
                         convertInputsToOutsourcedPart()
                 );
             }
-            System.out.print("Updated Part List: " + Inventory.getAllParts().toString());
-
+            System.out.println("Updated Part List: " + Inventory.getAllParts().toString());
             returnToMainScene(actionEvent);
         }
     }
@@ -102,7 +100,6 @@ public class AddPartController implements Initializable {
     private void returnToMainScene(ActionEvent actionEvent) throws IOException {
         Parent mainScreenParent = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
         window.setScene(new Scene(mainScreenParent));
         window.show();
     }

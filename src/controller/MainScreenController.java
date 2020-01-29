@@ -49,14 +49,12 @@ public class MainScreenController implements Initializable {
     @FXML public Button addProductButton;
     @FXML public Button modifyProductButton;
     @FXML public Button deleteProductButton;
+
     static Part partToModify;
+    static Product productToModify;
 
-    public void clickPartSearch(ActionEvent actionEvent) {
-
-    }
-
-    public void partTextSearch(ActionEvent actionEvent) {
-
+    public void clickPartSearch() {
+        partTable.setItems(Inventory.lookupPart(partSearchBox.getText()));
     }
 
     public void clickAddPart(ActionEvent actionEvent) throws IOException {
@@ -65,38 +63,51 @@ public class MainScreenController implements Initializable {
 
     public void clickModifyPart(ActionEvent actionEvent) throws IOException {
         partToModify = partTable.getSelectionModel().getSelectedItem();
-        changeScene(actionEvent, "/view/modifyPartScreen.fxml");
-        System.out.print("Part to modify: " + partToModify.toString());
+        if(partToModify == null){
+            Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
+            noSourceAlert.setHeaderText("Part selection is required!");
+            noSourceAlert.setContentText("Please select a part from the table before modifying.");
+            noSourceAlert.showAndWait();
+        } else {
+            changeScene(actionEvent, "/view/modifyPartScreen.fxml");
+            System.out.println("Part to modify: " + partToModify.toString());
+        }
     }
 
-    public void clickDeletePart(ActionEvent actionEvent) throws IOException {
+    public void clickDeletePart() {
         Inventory.deletePart(partTable.getSelectionModel().getSelectedItem());
-        changeScene(actionEvent, "/view/mainScreen.fxml");
-
-        System.out.print("Updated Part Inventory: " + Inventory.getAllParts().toString());
+        partTable.setItems(Inventory.getAllParts());
+        System.out.println("Updated Part Inventory: " + Inventory.getAllParts().toString());
     }
 
-    public void clickProductSearch(ActionEvent actionEvent) {
-    }
-
-    public void productTextSeach(ActionEvent actionEvent) {
+    public void clickProductSearch() {
+        productTable.setItems(Inventory.lookupProduct(productSearchBox.getText()));
     }
 
     public void clickAddProduct(ActionEvent actionEvent) throws IOException {
         changeScene(actionEvent, "/view/addProductScreen.fxml");
     }
 
-    public void clickModifyProduct(ActionEvent actionEvent) {
+    public void clickModifyProduct(ActionEvent actionEvent) throws IOException {
+        productToModify = productTable.getSelectionModel().getSelectedItem();
+        if (productToModify == null) {
+          Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
+          noSourceAlert.setHeaderText("Product selection is required!");
+          noSourceAlert.setContentText("Please select a product from the table before modifying.");
+          noSourceAlert.showAndWait();
+        } else {
+            changeScene(actionEvent, "/view/modifyProductScreen.fxml");
+            System.out.println("Product to modify: " + productToModify.toString());
+        }
     }
 
-    public void clickDeleteProduct(ActionEvent actionEvent) throws IOException {
+    public void clickDeleteProduct() {
         Inventory.deleteProduct(productTable.getSelectionModel().getSelectedItem());
-        changeScene(actionEvent, "/view/mainScreen.fxml");
-
-        System.out.print("Updated Product Inventory: " + Inventory.getAllProducts().toString());
+        productTable.setItems(Inventory.getAllProducts());
+        System.out.println("Updated Product Inventory: " + Inventory.getAllProducts().toString());
     }
 
-    public void clickExit(ActionEvent actionEvent) {
+    public void clickExit() {
         System.out.println("Closing application...");
         System.exit(0);
     }
@@ -104,7 +115,6 @@ public class MainScreenController implements Initializable {
     private void changeScene(ActionEvent actionEvent, String pathToSceneFxml) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(pathToSceneFxml));
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
         window.setScene(new Scene(parent));
         window.show();
     }

@@ -15,7 +15,7 @@ public abstract class Part {
     private SimpleIntegerProperty max;
 
     public Part(String name, double price, int stock, int min, int max) {
-        this.id = new SimpleIntegerProperty(count.incrementAndGet());
+        this.id = new SimpleIntegerProperty(count.getAndIncrement());
         this.name = new SimpleStringProperty(name);
         this.price = new SimpleDoubleProperty(price);
         this.stock = new SimpleIntegerProperty(stock);

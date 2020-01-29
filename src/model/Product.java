@@ -33,20 +33,13 @@ public class Product {
     }
 
     public void addAssociatedPart(Part part) {
-        associatedParts.add(part);
+        if (!associatedParts.contains(part)) {
+            associatedParts.add(part);
+        }
     }
 
     public boolean deleteAssociatedPart(Part selectedAsPart) {
-        boolean successfulDelete = false;
-
-        for (Part part : associatedParts) {
-            if (part.getId() == selectedAsPart.getId()) {
-                associatedParts.remove(selectedAsPart.getId());
-                successfulDelete = true;
-            }
-        }
-
-        return successfulDelete;
+       return associatedParts.remove(selectedAsPart);
     }
 
     public int getId() {

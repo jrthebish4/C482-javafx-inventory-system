@@ -16,9 +16,8 @@ public class Inventory {
         allProducts.add(newProduct);
     }
 
-    public static Part lookupPart(int partId) throws NullPointerException {
+    public static Part lookupPart(int partId) {
         Part partFound = null;
-
         for (Part part : allParts) {
             if (part.getId() == partId) partFound = part;
         }
@@ -26,9 +25,8 @@ public class Inventory {
         return partFound;
     }
 
-    public static Product lookupProduct(int productId) throws NullPointerException {
-        Product productFound = null;
-
+    public static Product lookupProduct(int productId) {
+        Product productFound = new Product();
         for (Product product : allProducts) {
             if (product.getId() == productId) productFound = product;
         }
@@ -39,9 +37,8 @@ public class Inventory {
 
     public static ObservableList<Part> lookupPart(String partName) {
         ObservableList<Part> partsFound = FXCollections.observableArrayList();
-
         for (Part part : allParts) {
-            if (part.getName().equalsIgnoreCase(partName)) partsFound.add(part);
+            if (part.getName().contains(partName)) partsFound.add(part);
         }
 
         return partsFound;
@@ -49,9 +46,8 @@ public class Inventory {
 
     public static ObservableList<Product> lookupProduct(String productName) {
         ObservableList<Product> productsFound = FXCollections.observableArrayList();
-
         for (Product product : allProducts) {
-            if (product.getName().equalsIgnoreCase(productName)) productsFound.add(product);
+            if (product.getName().contains(productName)) productsFound.add(product);
         }
 
         return productsFound;
@@ -61,38 +57,16 @@ public class Inventory {
         allParts.set(index, selectedPart);
     }
 
-    public static void updateProduct(int index, Product newProduct) {
-        allProducts.set(index, newProduct);
+    public static void updateProduct(int index, Product selectedProduct) {
+        allProducts.set(index, selectedProduct);
     }
 
     public static boolean deletePart(Part selectedPart) {
-        boolean successfulDelete = false;
-
-        if (!allParts.isEmpty()) {
-            for (Part part : allParts) {
-                if (part.getId() == selectedPart.getId()) {
-                    allParts.remove(part);
-                    successfulDelete = true;
-                }
-            }
-        }
-
-        return successfulDelete;
+       return allParts.remove(selectedPart);
     }
 
     public static boolean deleteProduct(Product selectedProduct) {
-        boolean successfulDelete = false;
-
-        if (!allProducts.isEmpty()) {
-            for (Product product : allProducts) {
-                if (product.getId() == selectedProduct.getId()) {
-                    allProducts.remove(product);
-                    successfulDelete = true;
-                }
-            }
-        }
-
-        return successfulDelete;
+        return allProducts.remove(selectedProduct);
     }
 
     public static ObservableList<Part> getAllParts() {

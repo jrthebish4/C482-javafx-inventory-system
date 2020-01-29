@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +43,7 @@ public class ModifyPartController implements Initializable {
     @FXML public Button saveButton;
     @FXML public Button cancelButton;
     private ToggleGroup sourceToggleGroup;
+
     final private Part partToModify = MainScreenController.partToModify;
 
     public void displayInHousePartFields() {
@@ -56,18 +58,20 @@ public class ModifyPartController implements Initializable {
 
     public void modifyNewPart(ActionEvent actionEvent) throws IOException {
         if (hasARadioBeenSelected()) {
-
             if (sourceToggleGroup.getSelectedToggle().equals(inHouseRadio)) {
-                Inventory.addPart(
-                        convertInputsToInHousePart()
+                InHouse updatedPart = convertInputsToInHousePart();
+                Inventory.updatePart(
+                        updatedPart.getId(),
+                        updatedPart
                 );
             } else if (sourceToggleGroup.getSelectedToggle().equals(outsourcedRadio)) {
-                Inventory.addPart(
-                        convertInputsToOutsourcedPart()
+                Outsourced updatedPart = convertInputsToOutsourcedPart();
+                Inventory.updatePart(
+                        updatedPart.getId(),
+                        updatedPart
                 );
             }
             System.out.print(Inventory.getAllParts().toString());
-
             returnToMainScene(actionEvent);
         }
     }
@@ -76,16 +80,22 @@ public class ModifyPartController implements Initializable {
         returnToMainScene(actionEvent);
     }
 
-    private Part convertInputsToInHousePart() {
-        return new InHouse(partNameField.getText(), Double.parseDouble(priceField.getText()),
+    private InHouse convertInputsToInHousePart() {
+        InHouse modifiedPart = new InHouse(partNameField.getText(), Double.parseDouble(priceField.getText()),
                 Integer.parseInt(inventoryField.getText()), Integer.parseInt(minField.getText()),
                 Integer.parseInt(maxField.getText()), Integer.parseInt(companyField.getText()));
+        modifiedPart.setId(new SimpleIntegerProperty(partToModify.getId()));
+
+        return modifiedPart;
     }
 
-    private Part convertInputsToOutsourcedPart() {
-        return new Outsourced(partNameField.getText(), Double.parseDouble(priceField.getText()),
+    private Outsourced convertInputsToOutsourcedPart() {
+        Outsourced modifiedPart = new Outsourced(partNameField.getText(), Double.parseDouble(priceField.getText()),
                 Integer.parseInt(inventoryField.getText()), Integer.parseInt(minField.getText()),
                 Integer.parseInt(maxField.getText()), companyField.getText());
+        modifiedPart.setId(new SimpleIntegerProperty(partToModify.getId()));
+
+        return modifiedPart;
     }
 
     private boolean hasARadioBeenSelected(){
@@ -103,7 +113,6 @@ public class ModifyPartController implements Initializable {
     private void returnToMainScene(ActionEvent actionEvent) throws IOException {
         Parent mainScreenParent = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
         Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
         window.setScene(new Scene(mainScreenParent));
         window.show();
     }
@@ -122,9 +131,14 @@ public class ModifyPartController implements Initializable {
         minField.setText(Integer.toString(partToModify.getMin()));
 
         if (partToModify instanceof InHouse) {
+            companyLabel.setText("Machine ID");
+            sourceToggleGroup.selectToggle(inHouseRadio);
             companyField.setText(Integer.toString(((InHouse) partToModify).getMachineId()));
         } else if (partToModify instanceof Outsourced) {
+            companyLabel.setText("Company");
+            sourceToggleGroup.selectToggle(outsourcedRadio);
             companyField.setText(((Outsourced) partToModify).getCompanyName());
         }
     }
+
 }
