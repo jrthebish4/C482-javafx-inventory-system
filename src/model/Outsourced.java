@@ -15,8 +15,8 @@ public class Outsourced extends Part {
         return companyName.get();
     }
 
-    public void setCompanyName(SimpleStringProperty companyName) {
-        this.companyName = companyName;
+    public void setCompanyName(String companyName) {
+        this.companyName = new SimpleStringProperty(companyName);
     }
 
     @Override
@@ -25,4 +25,5 @@ public class Outsourced extends Part {
                 " companyName='" + getCompanyName() + '\'' +
                 '}';
     }
+
 }

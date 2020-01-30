@@ -15,8 +15,8 @@ public class InHouse extends Part {
         return machineId.get();
     }
 
-    public void setMachineId(SimpleIntegerProperty machineId) {
-        this.machineId = machineId;
+    public void setMachineId(int machineId) {
+        this.machineId = new SimpleIntegerProperty(machineId);
     }
 
     @Override

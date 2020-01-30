@@ -39,7 +39,7 @@ public class Product {
     }
 
     public boolean deleteAssociatedPart(Part selectedAsPart) {
-       return associatedParts.remove(selectedAsPart);
+        return associatedParts.remove(selectedAsPart);
     }
 
     public int getId() {
@@ -106,4 +106,5 @@ public class Product {
                 ", max=" + getMax() +
                 '}';
     }
+
 }

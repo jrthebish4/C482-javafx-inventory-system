@@ -34,7 +34,6 @@ public class Inventory {
         return productFound;
     }
 
-
     public static ObservableList<Part> lookupPart(String partName) {
         ObservableList<Part> partsFound = FXCollections.observableArrayList();
         for (Part part : allParts) {
@@ -62,7 +61,7 @@ public class Inventory {
     }
 
     public static boolean deletePart(Part selectedPart) {
-       return allParts.remove(selectedPart);
+        return allParts.remove(selectedPart);
     }
 
     public static boolean deleteProduct(Product selectedProduct) {

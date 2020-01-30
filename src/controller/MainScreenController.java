@@ -53,6 +53,9 @@ public class MainScreenController implements Initializable {
     static Part partToModify;
     static Product productToModify;
 
+    static int partToModifyIndex;
+    static int productToModifyIndex;
+
     public void clickPartSearch() {
         partTable.setItems(Inventory.lookupPart(partSearchBox.getText()));
     }
@@ -63,8 +66,9 @@ public class MainScreenController implements Initializable {
 
     public void clickModifyPart(ActionEvent actionEvent) throws IOException {
         partToModify = partTable.getSelectionModel().getSelectedItem();
-        if(partToModify == null){
-            Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
+        partToModifyIndex = Inventory.getAllParts().indexOf(partToModify);
+        if (partToModify == null) {
+            Alert noSourceAlert = new Alert(Alert.AlertType.WARNING);
             noSourceAlert.setHeaderText("Part selection is required!");
             noSourceAlert.setContentText("Please select a part from the table before modifying.");
             noSourceAlert.showAndWait();
@@ -90,11 +94,12 @@ public class MainScreenController implements Initializable {
 
     public void clickModifyProduct(ActionEvent actionEvent) throws IOException {
         productToModify = productTable.getSelectionModel().getSelectedItem();
+        productToModifyIndex = Inventory.getAllProducts().indexOf(productToModify);
         if (productToModify == null) {
-          Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
-          noSourceAlert.setHeaderText("Product selection is required!");
-          noSourceAlert.setContentText("Please select a product from the table before modifying.");
-          noSourceAlert.showAndWait();
+            Alert noSourceAlert = new Alert(Alert.AlertType.WARNING);
+            noSourceAlert.setHeaderText("Product selection is required.");
+            noSourceAlert.setContentText("Please select a product from the table before modifying.");
+            noSourceAlert.showAndWait();
         } else {
             changeScene(actionEvent, "/view/modifyProductScreen.fxml");
             System.out.println("Product to modify: " + productToModify.toString());

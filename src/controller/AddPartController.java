@@ -44,7 +44,7 @@ public class AddPartController implements Initializable {
     private ToggleGroup sourceToggleGroup;
 
     public void addNewPart(ActionEvent actionEvent) throws IOException {
-        if (hasARadioBeenSelected()) {
+        if (requiredFieldsCheck()) {
             if (sourceToggleGroup.getSelectedToggle().equals(inHouseRadio)) {
                 Inventory.addPart(
                         convertInputsToInHousePart()
@@ -85,16 +85,21 @@ public class AddPartController implements Initializable {
                 Integer.parseInt(maxField.getText()), companyField.getText());
     }
 
-    private boolean hasARadioBeenSelected(){
-        if (sourceToggleGroup.getSelectedToggle() == null) {
-            Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
-            noSourceAlert.setHeaderText("Part source selection is required.");
-            noSourceAlert.setContentText("Please select \"In-House\" or \"Outsourced\" to continue.");
+    private boolean requiredFieldsCheck() {
+        if (partNameField.getText().isEmpty() || inventoryField.getText().isEmpty() ||
+                priceField.getText().isEmpty() || maxField.getText().isEmpty() ||
+                minField.getText().isEmpty() || companyField.getText().isEmpty() ||
+                sourceToggleGroup.getSelectedToggle() == null) {
+
+            Alert noSourceAlert = new Alert(Alert.AlertType.WARNING);
+            noSourceAlert.setHeaderText("Missing Required Fields.");
+            noSourceAlert.setContentText("All fields are required. Please enter all fields to continue.");
             noSourceAlert.showAndWait();
+
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     private void returnToMainScene(ActionEvent actionEvent) throws IOException {

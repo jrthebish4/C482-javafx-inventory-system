@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,17 +56,17 @@ public class ModifyPartController implements Initializable {
     }
 
     public void modifyNewPart(ActionEvent actionEvent) throws IOException {
-        if (hasARadioBeenSelected()) {
+        if (requiredFieldsCheck()) {
             if (sourceToggleGroup.getSelectedToggle().equals(inHouseRadio)) {
                 InHouse updatedPart = convertInputsToInHousePart();
                 Inventory.updatePart(
-                        updatedPart.getId(),
+                        MainScreenController.partToModifyIndex,
                         updatedPart
                 );
             } else if (sourceToggleGroup.getSelectedToggle().equals(outsourcedRadio)) {
                 Outsourced updatedPart = convertInputsToOutsourcedPart();
                 Inventory.updatePart(
-                        updatedPart.getId(),
+                        MainScreenController.partToModifyIndex,
                         updatedPart
                 );
             }
@@ -84,8 +83,8 @@ public class ModifyPartController implements Initializable {
         InHouse modifiedPart = new InHouse(partNameField.getText(), Double.parseDouble(priceField.getText()),
                 Integer.parseInt(inventoryField.getText()), Integer.parseInt(minField.getText()),
                 Integer.parseInt(maxField.getText()), Integer.parseInt(companyField.getText()));
-        modifiedPart.setId(new SimpleIntegerProperty(partToModify.getId()));
 
+        modifiedPart.setId(partToModify.getId());
         return modifiedPart;
     }
 
@@ -93,21 +92,24 @@ public class ModifyPartController implements Initializable {
         Outsourced modifiedPart = new Outsourced(partNameField.getText(), Double.parseDouble(priceField.getText()),
                 Integer.parseInt(inventoryField.getText()), Integer.parseInt(minField.getText()),
                 Integer.parseInt(maxField.getText()), companyField.getText());
-        modifiedPart.setId(new SimpleIntegerProperty(partToModify.getId()));
 
+        modifiedPart.setId(partToModify.getId());
         return modifiedPart;
     }
 
-    private boolean hasARadioBeenSelected(){
-        if (sourceToggleGroup.getSelectedToggle() == null) {
-            Alert noSourceAlert = new Alert(Alert.AlertType.ERROR);
-            noSourceAlert.setHeaderText("Part source selection is required.");
-            noSourceAlert.setContentText("Please select \"In-House\" or \"Outsourced\" to continue.");
+    private boolean requiredFieldsCheck() {
+        if (partNameField.getText().isEmpty() || inventoryField.getText().isEmpty() ||
+                priceField.getText().isEmpty() || maxField.getText().isEmpty() ||
+                minField.getText().isEmpty() || companyField.getText().isEmpty()) {
+
+            Alert noSourceAlert = new Alert(Alert.AlertType.WARNING);
+            noSourceAlert.setHeaderText("Missing Required Fields.");
+            noSourceAlert.setContentText("All fields are required. Please enter all fields to continue.");
             noSourceAlert.showAndWait();
+
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     private void returnToMainScene(ActionEvent actionEvent) throws IOException {

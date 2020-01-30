@@ -1,6 +1,8 @@
 package model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,48 +29,48 @@ public abstract class Part {
         return id.get();
     }
 
-    public void setId(SimpleIntegerProperty id) {
-        this.id = id;
+    public void setId(int id) {
+        this.id = new SimpleIntegerProperty(id);
     }
 
     public String getName() {
         return name.get();
     }
 
-    public void setName(SimpleStringProperty name) {
-        this.name = name;
+    public void setName(String name) {
+        this.name = new SimpleStringProperty(name);
     }
 
     public double getPrice() {
         return price.get();
     }
 
-    public void setPrice(SimpleDoubleProperty price) {
-        this.price = price;
+    public void setPrice(Double price) {
+        this.price = new SimpleDoubleProperty(price);
     }
 
     public int getStock() {
         return stock.get();
     }
 
-    public void setStock(SimpleIntegerProperty stock) {
-        this.stock = stock;
+    public void setStock(int stock) {
+        this.stock = new SimpleIntegerProperty(stock);
     }
 
     public int getMin() {
         return min.get();
     }
 
-    public void setMin(SimpleIntegerProperty min) {
-        this.min = min;
+    public void setMin(int min) {
+        this.min = new SimpleIntegerProperty(min);
     }
 
     public int getMax() {
         return max.get();
     }
 
-    public void setMax(SimpleIntegerProperty max) {
-        this.max = max;
+    public void setMax(int max) {
+        this.max = new SimpleIntegerProperty(max);
     }
 
     @Override

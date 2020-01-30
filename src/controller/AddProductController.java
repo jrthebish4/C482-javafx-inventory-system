@@ -76,19 +76,53 @@ public class AddProductController implements Initializable {
     }
 
     public void saveProduct(ActionEvent actionEvent) throws IOException {
-        productToAdd.setName(new SimpleStringProperty(productNameField.getText()));
-        productToAdd.setStock(new SimpleIntegerProperty(Integer.parseInt(inventoryField.getText())));
-        productToAdd.setPrice(new SimpleDoubleProperty(Double.parseDouble(priceField.getText())));
-        productToAdd.setMax(new SimpleIntegerProperty(Integer.parseInt(maxField.getText())));
-        productToAdd.setMin(new SimpleIntegerProperty(Integer.parseInt(minField.getText())));
-        Inventory.addProduct(productToAdd);
+        if (requiredFieldsCheck() && requiredPartCheck()) {
+            productToAdd.setName(new SimpleStringProperty(productNameField.getText()));
+            productToAdd.setStock(new SimpleIntegerProperty(Integer.parseInt(inventoryField.getText())));
+            productToAdd.setPrice(new SimpleDoubleProperty(Double.parseDouble(priceField.getText())));
+            productToAdd.setMax(new SimpleIntegerProperty(Integer.parseInt(maxField.getText())));
+            productToAdd.setMin(new SimpleIntegerProperty(Integer.parseInt(minField.getText())));
 
-        System.out.println("Updated Product List: " + Inventory.getAllProducts().toString());
-        returnToMainScene(actionEvent);
+            Inventory.addProduct(productToAdd);
+
+            System.out.println("Updated Product List: " + Inventory.getAllProducts().toString());
+            returnToMainScene(actionEvent);
+        }
     }
 
     public void cancelProductCreation(ActionEvent actionEvent) throws IOException {
         returnToMainScene(actionEvent);
+    }
+
+    private boolean requiredFieldsCheck() {
+        if (productNameField.getText().isEmpty() || inventoryField.getText().isEmpty() ||
+                priceField.getText().isEmpty() || maxField.getText().isEmpty() ||
+                minField.getText().isEmpty()) {
+
+            Alert noSourceAlert = new Alert(Alert.AlertType.WARNING);
+            noSourceAlert.setHeaderText("Missing Required Fields.");
+            noSourceAlert.setContentText("All fields are required. Please enter all fields to continue.");
+            noSourceAlert.showAndWait();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean requiredPartCheck() {
+        if (productToAdd.getAllAssociatedParts().size() <= 0) {
+
+            Alert noSourceAlert = new Alert(Alert.AlertType.WARNING);
+            noSourceAlert.setHeaderText("Missing Required Parts.");
+            noSourceAlert.setContentText("A product requires at least one part. " +
+                    "Please associate at least one part to continue.");
+            noSourceAlert.showAndWait();
+
+            return false;
+        }
+
+        return true;
     }
 
     private void returnToMainScene(ActionEvent actionEvent) throws IOException {
@@ -100,12 +134,12 @@ public class AddProductController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addPartIdColumn.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
+        addPartIdColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("id"));
         addPartNameColumn.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         addPartInventoryColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         addPartPriceColumn.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
-        deletePartIdColumn.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
+        deletePartIdColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("id"));
         deletePartNameColumn.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         deletePartInventoryColumn.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         deletePartPriceColumn.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
