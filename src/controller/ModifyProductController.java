@@ -70,7 +70,7 @@ public class ModifyProductController implements Initializable {
 
     public void dissociatePart() {
         productToModify.deleteAssociatedPart(
-                modifyPartTable.getSelectionModel().getSelectedItem()
+                deletePartTable.getSelectionModel().getSelectedItem()
         );
         deletePartTable.setItems(productToModify.getAllAssociatedParts());
     }
